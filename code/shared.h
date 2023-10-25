@@ -1,5 +1,10 @@
-#include<stdint.h>
+#include <iostream>
+#include <stdint.h>
+#include <iostream>
+#include <cstring>
+#include <Windows.h>
 
+#define MAX_PATH_APP 260
 #define internal static 
 
 #define Kilobytes(Value) ((Value)*1024LL)
@@ -34,4 +39,49 @@ struct app_state
     void *DisplayBuffer;
 };
 
+typedef struct thread_context
+{
+    int Placeholder;
+} thread_context;
 
+typedef struct debug_read_file_result
+{
+    u32 ContentsSize;
+    void *Contents;
+} debug_read_file_result;
+
+inline u32 safe_truncate_u64(u64 Value)
+{
+    Assert(Value <= 0xFFFFFFFF);
+    u32 Result = (u32)Value;
+    return Result;
+}
+
+#include "string.h"
+#include"win32_file.cpp"
+
+char* win32_wchar_to_char(WCHAR *wideStr) {
+    int requiredSize = WideCharToMultiByte(CP_UTF8, 0, wideStr, -1, nullptr, 0, NULL, NULL);
+    if (requiredSize == 0) {
+        // Handle the error here
+        return nullptr;
+    }
+
+    char* charStr = new char[requiredSize];
+    WideCharToMultiByte(CP_UTF8, 0, wideStr, -1, charStr, requiredSize, NULL, NULL);
+
+    return charStr;
+}
+
+WCHAR* win32_char_to_wchar(const char* charStr) {
+    int requiredSize = MultiByteToWideChar(CP_UTF8, 0, charStr, -1, nullptr, 0);
+    if (requiredSize == 0) {
+        // Handle the error here
+        return nullptr;
+    }
+
+    WCHAR* wideStr = new WCHAR[requiredSize];
+    MultiByteToWideChar(CP_UTF8, 0, charStr, -1, wideStr, requiredSize);
+
+    return wideStr;
+}
