@@ -1,6 +1,7 @@
+#include"shared.h"
 
 
-inline b32 win32_is_folder_empty(char *FolderPath) {
+inline b32 Win32IsFolderEmpty(char *FolderPath) {
     b32 Result = false;
 
     char FolderPathWithStar[MAX_PATH_APP];
@@ -40,6 +41,20 @@ inline b32 win32_is_folder_empty(char *FolderPath) {
 
     FindClose(FileHandle);
     return Result;
+}
+
+inline b32 CreateEmptyFolder(char *FolderName)
+{
+    b32 Result;
+    if(CreateDirectoryA(FolderName, 0))
+    {
+        Result = true;
+    }
+    else
+    {
+        printf("Folder with path: %s could not be created\n", FolderName);
+        Result = true;
+    }
 }
 
 inline b32 win32_move_file(thread_context *Thread, char *FilePath, char *NewFilePath)
@@ -206,16 +221,6 @@ inline b32 win32_copy_file(char *InFilePath, char *OutFilePath)
 	return Result;
 }
 
-b32 win32_create_folder(char *FolderPath)
-{
-	b32 Result = false;
-	if (CreateDirectory(FolderPath, 0))
-    {
-        Result =  true;
-    }
-	return Result;    
-}
-
 b32 FolderExists(char *FolderPath)
 {
 	b32 Result = false;
@@ -243,3 +248,4 @@ inline bool win32_is_folder(char *path)
         return false;
     }
 }
+

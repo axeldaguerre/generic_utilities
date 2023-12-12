@@ -1,6 +1,7 @@
+#if !defined(SHARE_H)
+
 #include <iostream>
 #include <stdint.h>
-#include <iostream>
 #include <cstring>
 #include <Windows.h>
 
@@ -58,7 +59,6 @@ inline u32 safe_truncate_u64(u64 Value)
 }
 
 #include "string.h"
-#include"win32_file.cpp"
 
 char* win32_wchar_to_char(WCHAR *wideStr) {
     int requiredSize = WideCharToMultiByte(CP_UTF8, 0, wideStr, -1, nullptr, 0, NULL, NULL);
@@ -73,6 +73,7 @@ char* win32_wchar_to_char(WCHAR *wideStr) {
     return charStr;
 }
 
+
 WCHAR* win32_char_to_wchar(const char* charStr) {
     int requiredSize = MultiByteToWideChar(CP_UTF8, 0, charStr, -1, nullptr, 0);
     if (requiredSize == 0) {
@@ -85,3 +86,6 @@ WCHAR* win32_char_to_wchar(const char* charStr) {
 
     return wideStr;
 }
+
+#define SHARE_H
+#endif
